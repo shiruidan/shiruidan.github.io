@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.1" />
+
+
+<title>R笔记1223 - A Hugo website</title>
+<meta property="og:title" content="R笔记1223 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">1 min read</span>
+    
+
+    <h1 class="article-title">R笔记1223</h1>
+
+    
+    <span class="article-date">2020-12-23</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="数据清理示例" class="section level1">
+<h1>数据清理示例</h1>
+<ul>
+<li>读入txt数据，设置标题</li>
+</ul>
+<pre class="r"><code>clean &lt;- read.csv(&quot;D:\\R\\data\\clean.txt&quot;, header = FALSE, col.names = c(&quot;age&quot;,&quot;height&quot;, &quot;gender&quot;))</code></pre>
+</div>
+<div id="替换异常数据" class="section level1">
+<h1>替换异常数据</h1>
+<ul>
+<li>替换单个单元格</li>
+</ul>
+<pre class="r"><code>clean$height[3] &lt;- 5.7</code></pre>
+<ul>
+<li>批量替换</li>
+</ul>
+<pre class="r"><code>gsub(&quot;*&quot;, &quot;&quot;, clean$height, fixed = TRUE)</code></pre>
+<pre><code>## [1] &quot;6.0&quot;   &quot;5.9&quot;   &quot;5.7&quot;   &quot;-9999&quot;</code></pre>
+<p>#替换异常数据
+- 方法1 读入后替换</p>
+<pre class="r"><code>clean$height[clean$height==-9999] &lt;- NA</code></pre>
+<ul>
+<li>方法2 读入时替换,多个替换用 na.strings=c(某，某，某)</li>
+</ul>
+<pre class="r"><code>clean &lt;- read.csv(&#39;D:\\R\\data\\clean.txt&#39;,na.strings = -9999,header = FALSE,col.names = c(&#39;age&#39;,&#39;height&#39;,&#39;gender&#39;))</code></pre>
+<ul>
+<li>逐个替换</li>
+</ul>
+<pre class="r"><code>clean$gender[clean$gender==&#39; M&#39;] &lt;- &#39;male&#39;</code></pre>
+<ul>
+<li>批量替换</li>
+</ul>
+<pre class="r"><code>clean$gender[clean$gender==&#39;NA&#39;] &lt;- NA
+loc.na &lt;- is.na(clean$gender)
+clean$gender &lt;- ifelse(clean$gender%in% c(&#39; M&#39;,&#39;male&#39;,&#39;ma&#39;),&#39;male&#39;,&#39;female&#39;)
+clean$gender[loc.na] &lt;- NA</code></pre>
+</div>
+<div id="读取excel" class="section level1">
+<h1>读取excel</h1>
+<pre class="r"><code>library(readxl)
+cz &lt;- read_xlsx(&#39;D:\\R\\data\\cz.xlsx&#39;)</code></pre>
+<ul>
+<li>cz表格年月连起来</li>
+</ul>
+<pre class="r"><code>cz$ym &lt;- paste(cz$year,cz$month,sep = &#39;_&#39;)</code></pre>
+<ul>
+<li>新建cz2，包含完整年份、月份</li>
+</ul>
+<pre class="r"><code># year从2006到2019每一个重复12次；month1到12月重复14次
+cz2 &lt;- data.frame(year=rep(2006:2019,each=12),
+                  month=rep(1:12,14))</code></pre>
+<ul>
+<li>cz2表格年月合到一列</li>
+</ul>
+<pre class="r"><code>cz2$ym &lt;- paste(cz2$year,cz2$month,sep = &#39;_&#39;)</code></pre>
+<ul>
+<li>新建cz3将cz与cz2结合到一起</li>
+</ul>
+<pre class="r"><code># 表cz与cz2按照ym列结合并存到cz3
+cz3 &lt;- merge(cz,cz2,by=&#39;ym&#39;,all=TRUE)</code></pre>
+<pre class="r"><code># 将cz3中的ym等无用列删除
+cz3 &lt;- cz3[,!(colnames(cz3)%in%c(&#39;ym&#39;,&#39;year.y&#39;,&#39;month.y&#39;))]</code></pre>
+<ul>
+<li>将新表排序</li>
+</ul>
+<pre class="r"><code>cz4 &lt;- cz3[order(cz3$year.x, cz3$month.x), ]</code></pre>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

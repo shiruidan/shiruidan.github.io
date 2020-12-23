@@ -6,7 +6,17 @@
     <description>Recent content in Posts on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 30 Dec 2016 21:49:57 -0700</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R笔记1223</title>
+      <link>/2020/12/23/r-1223/</link>
+      <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/12/23/r-1223/</guid>
+      <description>数据清理示例读入txt数据，设置标题clean &amp;lt;- read.csv(&amp;quot;D:\\R\\data\\clean.txt&amp;quot;, header = FALSE, col.names = c(&amp;quot;age&amp;quot;,&amp;quot;height&amp;quot;, &amp;quot;gender&amp;quot;))替换异常数据替换单个单元格clean$height[3] &amp;lt;- 5.7批量替换gsub(&amp;quot;*&amp;quot;, &amp;quot;&amp;quot;, clean$height, fixed = TRUE)## [1] &amp;quot;6.0&amp;quot; &amp;quot;5.9&amp;quot; &amp;quot;5.7&amp;quot; &amp;quot;-9999&amp;quot;#替换异常数据- 方法1 读入后替换
+clean$height[clean$height==-9999] &amp;lt;- NA方法2 读入时替换,多个替换用 na.strings=c(某，某，某)clean &amp;lt;- read.csv(&amp;#39;D:\\R\\data\\clean.txt&amp;#39;,na.strings = -9999,header = FALSE,col.names = c(&amp;#39;age&amp;#39;,&amp;#39;height&amp;#39;,&amp;#39;gender&amp;#39;))逐个替换clean$gender[clean$gender==&amp;#39; M&amp;#39;] &amp;lt;- &amp;#39;male&amp;#39;批量替换clean$gender[clean$gender==&amp;#39;NA&amp;#39;] &amp;lt;- NAloc.</description>
+    </item>
+    
     <item>
       <title>A Plain Markdown Post</title>
       <link>/2016/12/30/a-plain-markdown-post/</link>
